@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>30-Day Field Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --base: #16170f;
+    --panel: #212316;
+    --panel-2: #2a2c1d;
+    --line: #3a3c29;
+    --stone: #e3dfcc;
+    --muted: #8f8f73;
+    --work: #c9a227;
+    --work-dim: #4a3f14;
+    --rest: #4f8596;
+    --rest-dim: #1c3238;
+    --danger: #a85a3f;
+    --radius: 3px;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body {
+    background: var(--base);
+    color: var(--stone);
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3, .num {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* ---------- Header ---------- */
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .masthead h1 {
+    font-size: 22px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .masthead .sub {
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ---------- Day grid ---------- */
+  .weekblock { margin-bottom: 14px; }
+  .weeklabel {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.03em;
+  }
+  .daygrid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0,1fr));
+    gap: 6px;
+  }
+  .daybtn {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: var(--radius);
+    padding: 7px 2px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    line-height: 1.1;
+  }
+  .daybtn .tag {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .daybtn.recovery { border-style: dashed; }
+  .daybtn.test { border-color: var(--work); color: var(--work); }
+  .daybtn.done::after {
+    content: '';
+    position: absolute;
+    top: 3px; right: 3px;
+    width: 5px; height: 5px;
+    background: var(--rest);
+    border-radius: 50%;
+  }
+  .daybtn:hover { border-color: var(--stone); color: var(--stone); }
+  .daybtn.active {
+    background: var(--work);
+    border-color: var(--work);
+    color: var(--base);
+  }
+  .daybtn.active .tag { color: var(--base); opacity: 0.7; }
+
+  /* ---------- Day panel ---------- */
+  .panel {
+    margin-top: 26px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .panel-head .day-id {
+    font-size: 28px;
+    font-family: 'Oswald', sans-serif;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .panel-head .day-id span { color: var(--muted); font-size: 13px; font-family: 'Inter', sans-serif; }
+  .week-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--work);
+  }
+  .section { padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  .section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--stone);
+  }
+  .notes { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0; }
+
+  /* ---------- Exercise list ---------- */
+  .exlist { list-style: none; margin: 0; padding: 0; }
+  .exlist li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+  }
+  .exlist li:last-child { border-bottom: none; }
+  .exlist .exnum {
+    font-family: 'Oswald', sans-serif;
+    color: var(--muted);
+    font-size: 13px;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .exlist li.current { color: var(--work); }
+  .exlist li.current .exnum { color: var(--work); }
+  .exlist li.past { color: var(--muted); opacity: 0.55; }
+
+  /* ---------- Timer controls ---------- */
+  .ctrl-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .ctrl {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .ctrl label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+  .ctrl input {
+    width: 72px;
+    background: var(--base);
+    border: 1px solid var(--line);
+    color: var(--stone);
+    border-radius: var(--radius);
+    padding: 7px 8px;
+    font-size: 15px;
+    font-family: 'Oswald', sans-serif;
+  }
+  .ctrl input:focus { outline: none; border-color: var(--work); }
+
+  /* ---------- Timer display ---------- */
+  .timer-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 26px 10px 10px;
+    text-align: center;
+  }
+  .phase-label {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .phase-label.work { color: var(--work); }
+  .phase-label.rest { color: var(--rest); }
+  .phase-label.idle { color: var(--muted); }
+  .countdown {
+    font-family: 'Oswald', sans-serif;
+    font-size: 86px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown.work { color: var(--work); }
+  .countdown.rest { color: var(--rest); }
+  .countdown.idle { color: var(--stone); }
+  .current-ex {
+    font-size: 17px;
+    margin-top: 10px;
+    min-height: 24px;
+  }
+  .ring-wrap { position: relative; width: 210px; height: 210px; margin: 10px auto 4px; }
+  .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--panel-2); stroke-width: 6; }
+  .ring-fg { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.25s linear, stroke 0.2s; }
+  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+  .round-track {
+    display: flex;
+    gap: 5px;
+    margin: 14px 0 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .round-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+  .round-dot.filled { background: var(--work); }
+  .round-dot.live { background: var(--rest); }
+
+  .btnrow { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--stone);
+    cursor: pointer;
+  }
+  .btn.primary { background: var(--work); border-color: var(--work); color: var(--base); }
+  .btn.danger { color: var(--danger); border-color: var(--danger); background: transparent; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* ---------- Test day ---------- */
+  .testrow {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .testrow:last-child { border-bottom: none; }
+  .testrow .tname { font-size: 14.5px; }
+  .testrow .ttime { font-size: 12px; color: var(--muted); }
+  .testrow input {
+    width: 80px;
+    background: var(--base);
+    border: 1px solid var(--line);
+    color: var(--stone);
+    border-radius: var(--radius);
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  .testbtn {
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--stone);
+    cursor: pointer;
+  }
+  .testbtn.active { background: var(--work); border-color: var(--work); color: var(--base); }
+
+  .amrap-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 10px 0 18px;
+  }
+  .amrap-timer .cd {
+    font-family: 'Oswald', sans-serif;
+    font-size: 48px;
+    font-variant-numeric: tabular-nums;
+  }
+  .lapcount {
+    text-align: center;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  footer.hint {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  @media (max-width: 520px) {
+    .daygrid { grid-template-columns: repeat(7, minmax(0,1fr)); gap: 4px; }
+    .daybtn { font-size: 13px; padding: 6px 1px; }
+    .countdown { font-size: 64px; }
+    .ring-wrap { width: 170px; height: 170px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring-fg { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <h1>30-Day Field Program</h1>
+    <div class="sub">Bodyweight conditioning · adjustable work / rest intervals</div>
+  </div>
+
+  <div id="dayNav"></div>
+
+  <div class="panel" id="panel"></div>
+
+  <footer class="hint">Timer runs locally in this browser. Dots on the calendar mark days you've completed.</footer>
+</div>
+
+<script>
+(function(){
+
+  /* ---------------- DATA ---------------- */
+
+  const warmup = ["March in place", "Arm circles / shoulder rolls", "Easy squats", "Alternating reverse lunges", "Marching high knees"];
+
+  const weeks = [
+    {
+      id: 1, title: "Build the Base", days: [1,2,3,4,5], recoveryDays: [6,7],
+      work: 40, rest: 20, rounds: 2,
+      circuit: ["Bodyweight squats","Push-ups — regular or hands elevated","Reverse lunges — alternate legs","Mountain climbers — controlled","Glute bridges","Plank","Marching high knees"],
+      finisher: "6 minutes, alternating 30 sec fast march / 30 sec easy march.",
+      recoveryNote: "Recovery. Take a 20–30 minute walk; no hard workout."
+    },
+    {
+      id: 2, title: "Soldier Conditioning", days: [8,9,10,11,12], recoveryDays: [13,14],
+      work: 45, rest: 15, rounds: 3,
+      circuit: ["Squats","Push-ups","Reverse lunges","Mountain climbers","Glute bridges","Plank","High-knee march"],
+      finisher: "3 minutes: 20 sec fast feet / 20 sec rest, 20 sec squats / 20 sec rest, 20 sec mountain climbers / 20 sec rest. Repeat.",
+      recoveryNote: "Recovery / walking."
+    },
+    {
+      id: 3, title: "Combat Conditioning", days: [15,16,17,18,19], recoveryDays: [20,21],
+      work: 45, rest: 15, rounds: 3,
+      circuit: ["Squat → reach overhead","Push-ups","Alternating reverse lunges","Mountain climbers","Squat thrusts — step feet back/forward if needed","Plank shoulder taps","Glute bridges","High knees or fast marching"],
+      finisher: "4 minutes, 20 sec hard / 20 sec easy: fast march, mountain climbers, squats, fast march. Repeat.",
+      recoveryNote: "Recovery."
+    },
+    {
+      id: 4, title: "Military Challenge", days: [22,23,24,25,26], recoveryDays: [],
+      work: 50, rest: 10, rounds: 3,
+      circuit: ["Push-ups","Squats","Reverse lunges","Mountain climbers","Squat thrusts","Plank","Glute bridges","High knees"],
+      finisher: "Circuit runs 24 minutes including rests. Use remaining time for a cooldown.",
+      recoveryNote: ""
+    }
+  ];
+
+  const amrapDays = [27,28,29];
+  const amrapReps = ["10 squats","8 push-ups","10 alternating reverse lunges","10 mountain climbers / side","8 squat thrusts","20 sec plank"];
+
+  const testDay = 30;
+  const testItems = [
+    { name: "Push-ups", seconds: 120 },
+    { name: "Bodyweight squats", seconds: 120 },
+    { name: "Alternating reverse lunges", seconds: 120 },
+    { name: "Mountain climbers", seconds: 120 },
+    { name: "Plank — accumulated quality hold", seconds: 120 }
+  ];
+
+  function getWeekFor(day) {
+    for (const w of weeks) {
+      if (w.days.includes(day) || w.recoveryDays.includes(day)) return w;
+    }
+    return null;
+  }
+  function dayType(day) {
+    if (day === testDay) return 'test';
+    if (amrapDays.includes(day)) return 'amrap';
+    const w = getWeekFor(day);
+    if (w && w.recoveryDays.includes(day)) return 'recovery';
+    if (w) return 'circuit';
+    return 'circuit';
+  }
+
+  /* ---------------- STORAGE ---------------- */
+
+  function loadJSON(key, fallback) {
+    try {
+      const v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function saveJSON(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+
+  let completed = loadJSON('fp_completed', {});
+  let dayPrefs = loadJSON('fp_prefs', {});   // { [day]: {work, rest, rounds} }
+  let testResults = loadJSON('fp_test', {});
+  let currentDay = loadJSON('fp_currentday', 1);
+
+  /* ---------------- TIMER ENGINE ---------------- */
+
+  let timer = {
+    running: false,
+    phase: 'idle',      // idle | work | rest | done
+    exIndex: 0,
+    round: 1,
+    remaining: 0,
+    totalForPhase: 0,
+    interval: null,
+    circuit: [],
+    workSec: 40,
+    restSec: 20,
+    rounds: 2
+  };
+
+  let audioCtx = null;
+  function beep(freq, dur) {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.frequency.value = freq;
+      o.connect(g); g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+      o.start();
+      o.stop(audioCtx.currentTime + dur);
+    } catch(e) {}
+  }
+
+  function resetTimerForDay(day) {
+    clearInterval(timer.interval);
+    const w = getWeekFor(day);
+    const prefs = dayPrefs[day] || {};
+    timer = {
+      running: false, phase: 'idle', exIndex: 0, round: 1,
+      remaining: 0, totalForPhase: 0, interval: null,
+      circuit: w ? w.circuit : [],
+      workSec: prefs.work || (w ? w.work : 40),
+      restSec: prefs.rest || (w ? w.rest : 20),
+      rounds: prefs.rounds || (w ? w.rounds : 2)
+    };
+  }
+
+  function persistPrefs(day) {
+    dayPrefs[day] = { work: timer.workSec, rest: timer.restSec, rounds: timer.rounds };
+    saveJSON('fp_prefs', dayPrefs);
+  }
+
+  function startTimer() {
+    if (timer.circuit.length === 0) return;
+    if (timer.phase === 'idle' || timer.phase === 'done') {
+      timer.phase = 'work';
+      timer.exIndex = 0;
+      timer.round = 1;
+      timer.remaining = timer.workSec;
+      timer.totalForPhase = timer.workSec;
+    }
+    timer.running = true;
+    clearInterval(timer.interval);
+    timer.interval = setInterval(tick, 1000);
+    renderTimer();
+  }
+
+  function pauseTimer() {
+    timer.running = false;
+    clearInterval(timer.interval);
+    renderTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer.interval);
+    timer.running = false;
+    timer.phase = 'idle';
+    timer.exIndex = 0;
+    timer.round = 1;
+    timer.remaining = 0;
+    renderTimer();
+  }
+
+  function tick() {
+    timer.remaining -= 1;
+    if (timer.remaining <= 0) {
+      advancePhase();
+    } else {
+      if (timer.remaining <= 3) beep(timer.phase === 'work' ? 523 : 392, 0.12);
+      renderTimer();
+    }
+  }
+
+  function advancePhase() {
+    if (timer.phase === 'work') {
+      beep(660, 0.18);
+      timer.phase = 'rest';
+      timer.remaining = timer.restSec;
+      timer.totalForPhase = timer.restSec;
+    } else if (timer.phase === 'rest') {
+      timer.exIndex += 1;
+      if (timer.exIndex >= timer.circuit.length) {
+        timer.exIndex = 0;
+        timer.round += 1;
+        if (timer.round > timer.rounds) {
+          beep(880, 0.3);
+          timer.phase = 'done';
+          timer.running = false;
+          clearInterval(timer.interval);
+          completed[currentDay] = true;
+          saveJSON('fp_completed', completed);
+          renderDayNav();
+          renderTimer();
+          return;
+        }
+      }
+      beep(523, 0.15);
+      timer.phase = 'work';
+      timer.remaining = timer.workSec;
+      timer.totalForPhase = timer.workSec;
+    }
+    renderTimer();
+  }
+
+  /* ---------------- RENDER: DAY NAV ---------------- */
+
+  function renderDayNav() {
+    const el = document.getElementById('dayNav');
+    let html = '';
+    weeks.forEach(w => {
+      html += `<div class="weekblock"><div class="weeklabel">Week ${w.id} — ${w.title}</div><div class="daygrid">`;
+      w.days.forEach(d => { html += dayBtnHtml(d); });
+      w.recoveryDays.forEach(d => { html += dayBtnHtml(d); });
+      html += `</div></div>`;
+    });
+    html += `<div class="weekblock"><div class="weeklabel">Final Stretch</div><div class="daygrid">`;
+    amrapDays.forEach(d => { html += dayBtnHtml(d); });
+    html += dayBtnHtml(testDay);
+    html += `</div></div>`;
+    el.innerHTML = html;
+
+    el.querySelectorAll('.daybtn').forEach(btn => {
+      btn.addEventListener('click', () => selectDay(parseInt(btn.dataset.day, 10)));
+    });
+  }
+
+  function dayBtnHtml(d) {
+    const type = dayType(d);
+    const classes = ['daybtn'];
+    if (type === 'recovery') classes.push('recovery');
+    if (type === 'test') classes.push('test');
+    if (d === currentDay) classes.push('active');
+    if (completed[d]) classes.push('done');
+    const tag = type === 'test' ? 'Test' : type === 'amrap' ? 'AMRAP' : type === 'recovery' ? 'Rest' : '';
+    return `<div class="${classes.join(' ')}" data-day="${d}">${d}${tag ? `<span class="tag">${tag}</span>` : ''}</div>`;
+  }
+
+  function selectDay(d) {
+    currentDay = d;
+    saveJSON('fp_currentday', d);
+    resetTimerForDay(d);
+    renderDayNav();
+    renderPanel();
+  }
+
+  /* ---------------- RENDER: PANEL ---------------- */
+
+  function renderPanel() {
+    const type = dayType(currentDay);
+    const panel = document.getElementById('panel');
+    const w = getWeekFor(currentDay);
+
+    if (type === 'circuit') {
+      panel.innerHTML = circuitPanelHtml(w);
+      wireCircuitPanel(w);
+      renderTimer();
+    } else if (type === 'recovery') {
+      panel.innerHTML = recoveryPanelHtml(w);
+    } else if (type === 'amrap') {
+      panel.innerHTML = amrapPanelHtml();
+      wireAmrapPanel();
+    } else if (type === 'test') {
+      panel.innerHTML = testPanelHtml();
+      wireTestPanel();
+    }
+  }
+
+  function circuitPanelHtml(w) {
+    return `
+      <div class="panel-head">
+        <div class="day-id">Day ${currentDay} <span>of 30</span></div>
+        <div class="week-title">Week ${w.id} — ${w.title}</div>
+      </div>
+      <div class="section">
+        <p class="section-title">5-Minute Warm-Up</p>
+        <div class="chiprow">${warmup.map(x => `<div class="chip">${x}</div>`).join('')}</div>
+      </div>
+      <div class="section">
+        <p class="section-title">Circuit — ${timer.rounds} Rounds</p>
+        <div class="ctrl-row">
+          <div class="ctrl"><label>Work (sec)</label><input id="workInput" type="number" min="5" max="600" value="${timer.workSec}"></div>
+          <div class="ctrl"><label>Rest (sec)</label><input id="restInput" type="number" min="0" max="600" value="${timer.restSec}"></div>
+          <div class="ctrl"><label>Rounds</label><input id="roundsInput" type="number" min="1" max="10" value="${timer.rounds}"></div>
+        </div>
+        <ul class="exlist" id="exList"></ul>
+      </div>
+      <div class="section">
+        <div class="timer-stage">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 100 100">
+              <circle class="ring-bg" cx="50" cy="50" r="44"></circle>
+              <circle class="ring-fg" id="ringFg" cx="50" cy="50" r="44" stroke="var(--muted)" stroke-dasharray="276.5" stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="ring-center">
+              <div class="phase-label idle" id="phaseLabel">Ready</div>
+              <div class="countdown idle" id="countdown">--</div>
+            </div>
+          </div>
+          <div class="current-ex" id="currentEx"></div>
+          <div class="round-track" id="roundTrack"></div>
+          <div class="btnrow">
+            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn primary" id="startBtn">Start</button>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <p class="section-title">Finisher</p>
+        <p class="notes">${w.finisher}</p>
+      </div>
+    `;
+  }
+
+  function recoveryPanelHtml(w) {
+    return `
+      <div class="panel-head">
+        <div class="day-id">Day ${currentDay} <span>of 30</span></div>
+        <div class="week-title">Week ${w.id} — Recovery</div>
+      </div>
+      <div class="section">
+        <p class="section-title">Today</p>
+        <p class="notes" style="font-size:16px; color: var(--stone);">${w.recoveryNote}</p>
+      </div>
+      <div class="section">
+        <p class="section-title">Reminder</p>
+        <p class="notes">No hard circuit today. Keep it easy — this is where the conditioning from the last few days actually sets in.</p>
+      </div>
+    `;
+  }
+
+  function amrapPanelHtml() {
+    return `
+      <div class="panel-head">
+        <div class="day-id">Day ${currentDay} <span>of 30</span></div>
+        <div class="week-title">Week 4 — AMRAP</div>
+      </div>
+      <div class="section">
+        <p class="section-title">5-Minute Warm-Up</p>
+        <div class="chiprow">${warmup.map(x => `<div class="chip">${x}</div>`).join('')}</div>
+      </div>
+      <div class="section">
+        <p class="section-title">As Many Rounds As Possible — 20 Minutes</p>
+        <ul class="exlist">${amrapReps.map((x,i) => `<li><span class="exnum">${i+1}</span>${x}</li>`).join('')}</ul>
+      </div>
+      <div class="section">
+        <p class="section-title">Clock</p>
+        <div class="amrap-timer">
+          <button class="btn" id="amrapMinus">−1 min</button>
+          <div class="cd" id="amrapCd">20:00</div>
+          <button class="btn" id="amrapPlus">+1 min</button>
+        </div>
+        <div class="btnrow">
+          <button class="btn" id="amrapReset">Reset</button>
+          <button class="btn primary" id="amrapStart">Start</button>
+        </div>
+        <div class="lapcount" id="amrapRounds">Rounds completed: 0</div>
+      </div>
+      <div class="section">
+        <p class="section-title">Finish</p>
+        <p class="notes">5 minutes easy walking / stretching.</p>
+      </div>
+    `;
+  }
+
+  function testPanelHtml() {
+    const saved = testResults || {};
+    return `
+      <div class="panel-head">
+        <div class="day-id">Day 30 <span>of 30</span></div>
+        <div class="week-title">Military Fitness Test</div>
+      </div>
+      <div class="section">
+        <p class="section-title">Instructions</p>
+        <p class="notes">Warm up 5 minutes, then run each test below and record your result. This becomes your baseline for the next 30 days.</p>
+      </div>
+      <div class="section">
+        <p class="section-title">Tests</p>
+        ${testItems.map((t,i) => `
+          <div class="testrow">
+            <div>
+              <div class="tname">${t.name}</div>
+              <div class="ttime">2:00 test window</div>
+            </div>
+            <input type="text" placeholder="Result" id="result_${i}" value="${saved['r'+i] !== undefined ? saved['r'+i] : ''}">
+            <button class="testbtn" data-idx="${i}">Run timer</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="section">
+        <div class="timer-stage">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 100 100">
+              <circle class="ring-bg" cx="50" cy="50" r="44"></circle>
+              <circle class="ring-fg" id="testRingFg" cx="50" cy="50" r="44" stroke="var(--muted)" stroke-dasharray="276.5" stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="ring-center">
+              <div class="phase-label idle" id="testPhaseLabel">Select a test</div>
+              <div class="countdown idle" id="testCountdown">2:00</div>
+            </div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="testResetBtn">Reset</button>
+            <button class="btn primary" id="testStartBtn" disabled>Start</button>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <p class="notes">Monthly goal: build strength, improve conditioning, reduce body fat, establish a repeatable routine. Never sacrifice form for speed.</p>
+      </div>
+    `;
+  }
+
+  /* ---------------- WIRE: CIRCUIT ---------------- */
+
+  function wireCircuitPanel(w) {
+    document.getElementById('workInput').addEventListener('change', (e) => {
+      let v = parseInt(e.target.value, 10) || w.work;
+      timer.workSec = Math.max(5, Math.min(600, v));
+      if (timer.phase === 'idle') {}
+      persistPrefs(currentDay);
+      renderDots();
+    });
+    document.getElementById('restInput').addEventListener('change', (e) => {
+      let v = parseInt(e.target.value, 10);
+      if (isNaN(v)) v = w.rest;
+      timer.restSec = Math.max(0, Math.min(600, v));
+      persistPrefs(currentDay);
+    });
+    document.getElementById('roundsInput').addEventListener('change', (e) => {
+      let v = parseInt(e.target.value, 10) || w.rounds;
+      timer.rounds = Math.max(1, Math.min(10, v));
+      persistPrefs(currentDay);
+      renderDots();
+    });
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (timer.running) { pauseTimer(); } else { startTimer(); }
+    });
+    document.getElementById('resetBtn').addEventListener('click', resetTimer);
+    renderExList();
+    renderDots();
+  }
+
+  function renderExList() {
+    const el = document.getElementById('exList');
+    if (!el) return;
+    el.innerHTML = timer.circuit.map((ex, i) => {
+      let cls = '';
+      if (timer.phase !== 'idle' && timer.phase !== 'done') {
+        if (i === timer.exIndex) cls = 'current';
+        else if (i < timer.exIndex) cls = 'past';
+      }
+      return `<li class="${cls}"><span class="exnum">${i+1}</span>${ex}</li>`;
+    }).join('');
+  }
+
+  function renderDots() {
+    const el = document.getElementById('roundTrack');
+    if (!el) return;
+    let html = '';
+    for (let r = 1; r <= timer.rounds; r++) {
+      let cls = 'round-dot';
+      if (r < timer.round) cls += ' filled';
+      else if (r === timer.round && timer.phase !== 'idle' && timer.phase !== 'done') cls += ' live';
+      html += `<div class="${cls}"></div>`;
+    }
+    el.innerHTML = html;
+  }
+
+  const RING_CIRC = 276.5;
+
+  function renderTimer() {
+    const phaseLabel = document.getElementById('phaseLabel');
+    const countdown = document.getElementById('countdown');
+    const currentEx = document.getElementById('currentEx');
+    const ringFg = document.getElementById('ringFg');
+    const startBtn = document.getElementById('startBtn');
+    if (!phaseLabel) return;
+
+    renderExList();
+    renderDots();
+
+    let label = 'Ready', cls = 'idle', display = String(timer.workSec), exText = '';
+    if (timer.phase === 'work') { label = 'Work'; cls = 'work'; display = String(timer.remaining); exText = timer.circuit[timer.exIndex] || ''; }
+    else if (timer.phase === 'rest') {
+      label = 'Rest'; cls = 'rest'; display = String(timer.remaining);
+      const next = timer.circuit[timer.exIndex + 1] ?? (timer.round < timer.rounds ? timer.circuit[0] : null);
+      exText = next ? `Next: ${next}` : 'Final stretch';
+    } else if (timer.phase === 'done') { label = 'Complete'; cls = 'work'; display = '✓'; exText = `${timer.rounds} rounds logged`; }
+
+    phaseLabel.className = 'phase-label ' + cls;
+    phaseLabel.textContent = label + (timer.phase !== 'idle' && timer.phase !== 'done' ? ` · Round ${timer.round}/${timer.rounds}` : '');
+    countdown.className = 'countdown ' + cls;
+    countdown.textContent = display;
+    currentEx.textContent = exText;
+
+    const frac = timer.totalForPhase > 0 ? (timer.remaining / timer.totalForPhase) : 0;
+    ringFg.style.stroke = cls === 'work' ? 'var(--work)' : cls === 'rest' ? 'var(--rest)' : 'var(--muted)';
+    ringFg.setAttribute('stroke-dashoffset', String(RING_CIRC * (1 - frac)));
+
+    startBtn.textContent = timer.running ? 'Pause' : (timer.phase === 'idle' ? 'Start' : timer.phase === 'done' ? 'Done' : 'Resume');
+    startBtn.disabled = timer.phase === 'done';
+  }
+
+  /* ---------------- WIRE: AMRAP ---------------- */
+
+  let amrap = { total: 20 * 60, remaining: 20 * 60, running: false, interval: null, rounds: 0 };
+
+  function wireAmrapPanel() {
+    amrap = { total: 20 * 60, remaining: 20 * 60, running: false, interval: null, rounds: 0 };
+    renderAmrap();
+    document.getElementById('amrapMinus').addEventListener('click', () => {
+      if (amrap.running) return;
+      amrap.total = Math.max(60, amrap.total - 60);
+      amrap.remaining = amrap.total;
+      renderAmrap();
+    });
+    document.getElementById('amrapPlus').addEventListener('click', () => {
+      if (amrap.running) return;
+      amrap.total += 60;
+      amrap.remaining = amrap.total;
+      renderAmrap();
+    });
+    document.getElementById('amrapStart').addEventListener('click', () => {
+      if (amrap.running) {
+        amrap.running = false;
+        clearInterval(amrap.interval);
+      } else {
+        amrap.running = true;
+        amrap.interval = setInterval(() => {
+          amrap.remaining -= 1;
+          if (amrap.remaining <= 0) {
+            amrap.remaining = 0;
+            amrap.running = false;
+            clearInterval(amrap.interval);
+            beep(880, 0.3);
+            completed[currentDay] = true;
+            saveJSON('fp_completed', completed);
+            renderDayNav();
+          }
+          renderAmrap();
+        }, 1000);
+      }
+      renderAmrap();
+    });
+    document.getElementById('amrapReset').addEventListener('click', () => {
+      amrap.running = false;
+      clearInterval(amrap.interval);
+      amrap.remaining = amrap.total;
+      amrap.rounds = 0;
+      renderAmrap();
+    });
+    document.getElementById('amrapRounds').addEventListener('click', () => {
+      amrap.rounds += 1;
+      renderAmrap();
+    });
+  }
+
+  function renderAmrap() {
+    const cd = document.getElementById('amrapCd');
+    const startBtn = document.getElementById('amrapStart');
+    const roundsEl = document.getElementById('amrapRounds');
+    if (!cd) return;
+    const m = Math.floor(amrap.remaining / 60);
+    const s = amrap.remaining % 60;
+    cd.textContent = `${m}:${String(s).padStart(2,'0')}`;
+    startBtn.textContent = amrap.running ? 'Pause' : 'Start';
+    roundsEl.textContent = `Rounds completed: ${amrap.rounds}  (tap to log +1)`;
+    roundsEl.style.cursor = 'pointer';
+  }
+
+  /* ---------------- WIRE: TEST DAY ---------------- */
+
+  let testTimer = { idx: null, remaining: 120, total: 120, running: false, interval: null };
+
+  function wireTestPanel() {
+    testTimer = { idx: null, remaining: 120, total: 120, running: false, interval: null };
+
+    document.querySelectorAll('.testbtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clearInterval(testTimer.interval);
+        testTimer = { idx: parseInt(btn.dataset.idx,10), remaining: testItems[parseInt(btn.dataset.idx,10)].seconds, total: testItems[parseInt(btn.dataset.idx,10)].seconds, running: false, interval: null };
+        document.querySelectorAll('.testbtn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('testStartBtn').disabled = false;
+        renderTestTimer();
+      });
+    });
+
+    document.getElementById('testStartBtn').addEventListener('click', () => {
+      if (testTimer.idx === null) return;
+      if (testTimer.running) {
+        testTimer.running = false;
+        clearInterval(testTimer.interval);
+      } else {
+        testTimer.running = true;
+        testTimer.interval = setInterval(() => {
+          testTimer.remaining -= 1;
+          if (testTimer.remaining <= 0) {
+            testTimer.remaining = 0;
+            testTimer.running = false;
+            clearInterval(testTimer.interval);
+            beep(880, 0.3);
+          }
+          renderTestTimer();
+        }, 1000);
+      }
+      renderTestTimer();
+    });
+
+    document.getElementById('testResetBtn').addEventListener('click', () => {
+      if (testTimer.idx === null) return;
+      testTimer.running = false;
+      clearInterval(testTimer.interval);
+      testTimer.remaining = testTimer.total;
+      renderTestTimer();
+    });
+
+    testItems.forEach((t, i) => {
+      const inp = document.getElementById('result_' + i);
+      inp.addEventListener('change', (e) => {
+        testResults['r' + i] = e.target.value;
+        saveJSON('fp_test', testResults);
+        checkTestComplete();
+      });
+    });
+
+    renderTestTimer();
+  }
+
+  function renderTestTimer() {
+    const label = document.getElementById('testPhaseLabel');
+    const cd = document.getElementById('testCountdown');
+    const ring = document.getElementById('testRingFg');
+    const startBtn = document.getElementById('testStartBtn');
+    if (!label) return;
+    if (testTimer.idx === null) {
+      label.textContent = 'Select a test';
+      label.className = 'phase-label idle';
+      cd.textContent = '2:00';
+      cd.className = 'countdown idle';
+      ring.style.stroke = 'var(--muted)';
+      ring.setAttribute('stroke-dashoffset', '0');
+      return;
+    }
+    const m = Math.floor(testTimer.remaining / 60);
+    const s = testTimer.remaining % 60;
+    label.textContent = testItems[testTimer.idx].name;
+    label.className = 'phase-label work';
+    cd.textContent = `${m}:${String(s).padStart(2,'0')}`;
+    cd.className = 'countdown ' + (testTimer.remaining === 0 ? 'rest' : 'work');
+    ring.style.stroke = 'var(--work)';
+    const frac = testTimer.total > 0 ? testTimer.remaining / testTimer.total : 0;
+    ring.setAttribute('stroke-dashoffset', String(RING_CIRC * (1 - frac)));
+    startBtn.textContent = testTimer.running ? 'Pause' : (testTimer.remaining === testTimer.total ? 'Start' : 'Resume');
+  }
+
+  function checkTestComplete() {
+    let allFilled = true;
+    for (let i = 0; i < testItems.length; i++) {
+      if (!testResults['r'+i]) { allFilled = false; break; }
+    }
+    if (allFilled) {
+      completed[testDay] = true;
+      saveJSON('fp_completed', completed);
+      renderDayNav();
+    }
+  }
+
+  /* ---------------- INIT ---------------- */
+
+  resetTimerForDay(currentDay);
+  renderDayNav();
+  renderPanel();
+
+})();
+</script>
+</body>
+</html>
